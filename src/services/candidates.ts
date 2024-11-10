@@ -32,3 +32,20 @@ export const initDataBase = async () => {
         console.log("Error accured while creating initial state of candidates", err)
     }
 }
+
+export const getCandidateList = async () => {
+  try {
+    const list = await Candidate.find()
+    return list
+  } catch (err) {
+    throw new Error(`${err}`)
+  }
+}
+
+export const addCandidate = async () => {
+  try {
+    
+  } catch (err) {
+    
+  }
+}

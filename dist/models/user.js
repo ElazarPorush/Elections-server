@@ -4,9 +4,10 @@ const mongoose_1 = require("mongoose");
 const userSchema = new mongoose_1.Schema({
     username: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
-    password: String,
+    password: { type: String, required: true },
     isAdmin: {
         type: Boolean,
         default: false
