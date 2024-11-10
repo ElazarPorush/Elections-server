@@ -1,5 +1,6 @@
-import { hash } from "bcrypt";
+import { compare, hash } from "bcrypt";
 import User, { IUser } from "../models/user";
+import { LoginDto, RegisterDto } from "../types/DTO/user";
 
 export const initDataBase = async () => {
     try {
@@ -26,7 +27,7 @@ export const initDataBase = async () => {
     }
 }
 
-export const addUser = async (user: IUser) => {
+export const addUser = async (user: RegisterDto) => {
     try {
         const encPass = await hash(user.password, 10)
         user.password = encPass
@@ -37,10 +38,14 @@ export const addUser = async (user: IUser) => {
     }
 }
 
-export const userLogin = async (user: IUser) => {
+export const userLogin = async (user: LoginDto) => {
     try {
-        
+      const userFromDatabase = await User.findOne({ username: user.username });
+      if (!userFromDatabase) throw new Error("user not found");
+      const match = await compare(user.password, userFromDatabase.password);
+      if (!match) throw new Error("wrong password");
+      return userFromDatabase;
     } catch (err) {
-        
+      throw err;
     }
-}
+  };

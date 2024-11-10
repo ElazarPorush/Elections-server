@@ -46,8 +46,16 @@ const addUser = async (user) => {
 exports.addUser = addUser;
 const userLogin = async (user) => {
     try {
+        const userFromDatabase = await user_1.default.findOne({ username: user.username });
+        if (!userFromDatabase)
+            throw new Error("user not found");
+        const match = await (0, bcrypt_1.compare)(user.password, userFromDatabase.password);
+        if (!match)
+            throw new Error("wrong password");
+        return userFromDatabase;
     }
     catch (err) {
+        throw err;
     }
 };
 exports.userLogin = userLogin;
