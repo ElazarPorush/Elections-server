@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userLogin = exports.addUser = exports.initDataBase = void 0;
 const bcrypt_1 = require("bcrypt");
 const user_1 = __importDefault(require("../models/user"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const initDataBase = async () => {
     try {
         const users = [
@@ -46,13 +47,20 @@ const addUser = async (user) => {
 exports.addUser = addUser;
 const userLogin = async (user) => {
     try {
-        const userFromDatabase = await user_1.default.findOne({ username: user.username });
+        const userFromDatabase = await user_1.default.findOne({ username: user.username }).lean();
         if (!userFromDatabase)
             throw new Error("user not found");
         const match = await (0, bcrypt_1.compare)(user.password, userFromDatabase.password);
         if (!match)
             throw new Error("wrong password");
-        return userFromDatabase;
+        const token = await jsonwebtoken_1.default.sign({
+            user_id: userFromDatabase._id,
+            isAdmin: userFromDatabase.isAdmin,
+            username: userFromDatabase.username
+        }, process.env.JWT_SECRET, {
+            expiresIn: "10m"
+        });
+        return { ...userFromDatabase, token, password: "******" };
     }
     catch (err) {
         throw err;

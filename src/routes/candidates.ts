@@ -11,18 +11,11 @@ export const sid = async (req: Request, res: Response) => {
     }
 }
 
-export const getCandidate = async (req: Request, res: Response) => {
+export const getCandidates = async (req: Request, res: Response) => {
     try {
         const list = await getCandidateList()
-        res.send({
-            data: list,
-            success: true
-        })
+        res.status(200).json(list)
     } catch (err) {
-        res.send({
-            data: null,
-            success: false,
-            error: err
-        })
+        res.status(400).json(err as Error)
     }
 }

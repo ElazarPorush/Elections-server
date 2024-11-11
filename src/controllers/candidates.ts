@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { getCandidate, sid } from "../routes/candidates";
+import { getCandidates, sid } from "../routes/candidates";
+import verifyUser from "../middlewares/verifyUser";
 
 const router = Router()
 
 router.post("/sid", sid)
 
-router.get("/", getCandidate)
+router.get("/", verifyUser, getCandidates)
 
 export default router

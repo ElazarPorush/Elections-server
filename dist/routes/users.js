@@ -15,29 +15,22 @@ const sid = async (req, res) => {
 exports.sid = sid;
 const login = async (req, res) => {
     try {
-        await (0, users_1.userLogin)(req.body);
-        res.sendStatus(200);
+        const loggedUser = await (0, users_1.userLogin)(req.body);
+        res.status(200).json(loggedUser);
     }
     catch (err) {
-        console.log(err);
-        res.sendStatus(400);
+        res.status(400).json(err.message);
     }
 };
 exports.login = login;
 const register = async (req, res) => {
     try {
         const newUser = await (0, users_1.addUser)(req.body);
-        res.send({
-            data: newUser,
-            error: false
-        });
+        res.status(201).json(newUser);
     }
     catch (err) {
         console.log(err);
-        res.send({
-            data: null,
-            error: err
-        });
+        res.status(400).json(err.message);
     }
 };
 exports.register = register;

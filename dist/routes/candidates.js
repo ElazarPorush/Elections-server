@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCandidate = exports.sid = void 0;
+exports.getCandidates = exports.sid = void 0;
 const candidates_1 = require("../services/candidates");
 const sid = async (req, res) => {
     try {
@@ -13,20 +13,13 @@ const sid = async (req, res) => {
     }
 };
 exports.sid = sid;
-const getCandidate = async (req, res) => {
+const getCandidates = async (req, res) => {
     try {
         const list = await (0, candidates_1.getCandidateList)();
-        res.send({
-            data: list,
-            success: true
-        });
+        res.status(200).json(list);
     }
     catch (err) {
-        res.send({
-            data: null,
-            success: false,
-            error: err
-        });
+        res.status(400).json(err);
     }
 };
-exports.getCandidate = getCandidate;
+exports.getCandidates = getCandidates;

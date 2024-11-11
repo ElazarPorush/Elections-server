@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { initDataBase, addUser, userLogin } from "../services/users"
+import { LoginDto } from "../types/DTO/user"
 
 export const sid = async (req: Request, res: Response) => {
     try {
@@ -11,28 +12,22 @@ export const sid = async (req: Request, res: Response) => {
     }
 }
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request<LoginDto>, res: Response) => {
     try {
-        await userLogin(req.body)
-        res.sendStatus(200)
+      const loggedUser = await userLogin(req.body)
+      res.status(200).json(loggedUser)
     } catch (err) {
-        console.log(err)
-        res.sendStatus(400)
-    }   
-}
+      res.status(400).json((err as Error).message)
+    }
+  };
+  
 
 export const register = async (req: Request, res: Response) => {
     try {
         const newUser = await addUser(req.body)
-        res.send({
-            data: newUser,
-            error: false
-        })
+        res.status(201).json(newUser)
     } catch (err) {
         console.log(err)
-        res.send({
-            data: null,
-            error: err
-        })
+        res.status(400).json((err as Error).message)
     }   
 }

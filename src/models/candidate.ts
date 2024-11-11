@@ -3,7 +3,7 @@ import { Schema, Document, model } from "mongoose"
 export interface ICandidate extends Document{
     name: string
     image: string
-    voted: number
+    votes: number
 }
 
 const candidateSchema = new Schema<ICandidate>({
@@ -12,9 +12,9 @@ const candidateSchema = new Schema<ICandidate>({
         unique: true
     },
     image: String,
-    voted: {
+    votes: {
         type: Number,
-        default: null
+        default: 0
     },
 })
 

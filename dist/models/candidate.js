@@ -7,9 +7,9 @@ const candidateSchema = new mongoose_1.Schema({
         unique: true
     },
     image: String,
-    voted: {
+    votes: {
         type: Number,
-        default: null
+        default: 0
     },
 });
 exports.default = (0, mongoose_1.model)("Candidate", candidateSchema);
